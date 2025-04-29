@@ -34,7 +34,7 @@ $$
 
 Queremos calcular:
 - $\frac{\partial L}{\partial w}$ (cómo cambia la pérdida si cambio el peso)
-- $ \frac{\partial L}{\partial b} $ (cómo cambia la pérdida si cambio el sesgo)
+- $\frac{\partial L}{\partial b}$ (cómo cambia la pérdida si cambio el sesgo)
 
 Para después **actualizar** los parámetros con, por ejemplo, **gradiente descendente**:
 
