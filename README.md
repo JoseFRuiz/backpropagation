@@ -149,3 +149,280 @@ Por ejemplo:
 
 ---
 
+## 5. Ejemplo
+Una red de 3 capas:
+
+* Capa 1: entrada $x \in \mathbb{R}^2$,
+* Capa 2: oculta $a^1 \in \mathbb{R}^3$,
+* Capa 3: salida $a^2 \in \mathbb{R}^1$.
+
+Funciones de activación: ReLU en oculta, sigmoide en salida.
+
+**Forward pass:**
+
+$$
+z^1 = W^1 x + b^1 \quad (W^1 \in \mathbb{R}^{3 \times 2})
+$$
+
+$$
+a^1 = \text{ReLU}(z^1)
+$$
+
+$$
+z^2 = W^2 a^1 + b^2 \quad (W^2 \in \mathbb{R}^{1 \times 3})
+$$
+
+$$
+a^2 = \text{sigmoid}(z^2)
+$$
+
+**Backward pass:**
+
+* Error en capa 2:
+
+$$
+\delta^2 = (a^2 - y) \odot \sigma'(z^2)
+$$
+
+donde $\sigma'(z^2) = a^2(1 - a^2)$ porque la derivada de sigmoide es eso.
+
+* Gradientes de capa 2:
+
+$$
+\frac{\partial L}{\partial W^2} = \delta^2 (a^1)^T
+$$
+
+$$
+\frac{\partial L}{\partial b^2} = \delta^2
+$$
+
+* Error en capa 1:
+
+$$
+\delta^1 = (W^2)^T \delta^2 \odot \text{ReLU}'(z^1)
+$$
+
+donde $\text{ReLU}'(z^1) = 1$ si $z^1 > 0$, $0$ si $z^1 \leq 0$.
+
+* Gradientes de capa 1:
+
+$$
+\frac{\partial L}{\partial W^1} = \delta^1 (x)^T
+$$
+
+$$
+\frac{\partial L}{\partial b^1} = \delta^1
+$$
+
+---
+
+Perfecto. Vamos a complementar tu ejemplo con **valores numéricos concretos** y calcular todo paso a paso, tanto la **propagación hacia adelante** como la **propagación hacia atrás**.
+
+---
+
+## 🔢 Supuestos numéricos
+
+Entrada:
+
+$$
+x = \begin{bmatrix} 1 \\ 2 \end{bmatrix}
+$$
+
+Parámetros de la red:
+
+##### Capa 1 (entrada a oculta):
+
+$$
+W^1 = \begin{bmatrix} 0.1 & 0.3 \\ -0.2 & 0.4 \\ 0.5 & -0.6 \end{bmatrix}, \quad b^1 = \begin{bmatrix} 0.1 \\ 0.0 \\ -0.1 \end{bmatrix}
+$$
+
+##### Capa 2 (oculta a salida):
+
+$$
+W^2 = \begin{bmatrix} 0.2 & -0.1 & 0.3 \end{bmatrix}, \quad b^2 = \begin{bmatrix} 0.05 \end{bmatrix}
+$$
+
+##### Etiqueta verdadera:
+
+$$
+y = \begin{bmatrix} 1 \end{bmatrix}
+$$
+
+---
+
+### **Forward Pass**
+
+##### Capa 1
+
+$$
+z^1 = W^1 x + b^1 = 
+\begin{bmatrix}
+0.1 & 0.3 \\
+-0.2 & 0.4 \\
+0.5 & -0.6
+\end{bmatrix}
+\begin{bmatrix}
+1 \\ 2
+\end{bmatrix}
++
+\begin{bmatrix}
+0.1 \\ 0.0 \\ -0.1
+\end{bmatrix}
+$$
+
+$$
+= \begin{bmatrix}
+0.1(1) + 0.3(2) \\
+-0.2(1) + 0.4(2) \\
+0.5(1) + (-0.6)(2)
+\end{bmatrix}
++
+\begin{bmatrix}
+0.1 \\ 0.0 \\ -0.1
+\end{bmatrix}
+$$
+
+$$
+= \begin{bmatrix}
+0.1 + 0.6 + 0.1 \\
+-0.2 + 0.8 + 0.0 \\
+0.5 - 1.2 - 0.1
+\end{bmatrix}
+$$
+
+$$
+=\begin{bmatrix}
+0.8 \\ 0.6 \\ -0.8
+\end{bmatrix}
+$$
+
+$$
+a^1 = \text{ReLU}(z^1) = \begin{bmatrix} \max(0, 0.8) \\ \max(0, 0.6) \\ \max(0, -0.8) \end{bmatrix} = \begin{bmatrix} 0.8 \\ 0.6 \\ 0.0 \end{bmatrix}
+$$
+
+---
+
+#### Capa 2
+
+$$
+z^2 = W^2 a^1 + b^2 = \begin{bmatrix} 0.2 & -0.1 & 0.3 \end{bmatrix}
+\begin{bmatrix} 0.8 \\ 0.6 \\ 0.0 \end{bmatrix} + 0.05
+$$
+
+$$
+= 0.2(0.8) + (-0.1)(0.6) + 0.3(0.0) + 0.05 = 0.16 - 0.06 + 0 + 0.05 = 0.15
+$$
+
+$$
+a^2 = \text{sigmoid}(z^2) = \frac{1}{1 + e^{-0.15}} \approx 0.5374
+$$
+
+---
+
+## **Backward Pass**
+
+#### Capa 2 (salida)
+
+$$
+\delta^2 = (a^2 - y) \cdot \sigma'(z^2)
+$$
+
+Sabemos que:
+
+$$
+a^2 = 0.5374, \quad y = 1 \Rightarrow a^2 - y = -0.4626
+$$
+
+La derivada de la sigmoide:
+
+$$
+\sigma'(z^2) = a^2(1 - a^2) = 0.5374 \cdot (1 - 0.5374) \approx 0.5374 \cdot 0.4626 \approx 0.2486
+$$
+
+Entonces:
+
+$$
+\delta^2 = -0.4626 \cdot 0.2486 \approx -0.1150
+$$
+
+#### Gradientes de capa 2:
+
+$$
+\frac{\partial L}{\partial W^2} = \delta^2 (a^1)^T = -0.1150 \cdot \begin{bmatrix} 0.8 & 0.6 & 0.0 \end{bmatrix} = \begin{bmatrix} -0.092 & -0.069 & 0.0 \end{bmatrix}
+$$
+
+$$
+\frac{\partial L}{\partial b^2} = \delta^2 = -0.1150
+$$
+
+---
+
+### Capa 1
+
+$$
+\delta^1 = (W^2)^T \delta^2 \odot \text{ReLU}'(z^1)
+$$
+
+Primero:
+
+$$
+(W^2)^T = \begin{bmatrix} 0.2 \\ -0.1 \\ 0.3 \end{bmatrix}
+$$
+
+$$
+(W^2)^T \delta^2 = \begin{bmatrix} 0.2 \\ -0.1 \\ 0.3 \end{bmatrix} \cdot (-0.1150) = \begin{bmatrix} -0.023 \\ 0.0115 \\ -0.0345 \end{bmatrix}
+$$
+
+Luego aplicamos la derivada de ReLU:
+
+$$
+z^1 = \begin{bmatrix} 0.8 \\ 0.6 \\ -0.8 \end{bmatrix} \Rightarrow \text{ReLU}'(z^1) = \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}
+$$
+
+$$
+\delta^1 = \begin{bmatrix} -0.023 \\ 0.0115 \\ -0.0345 \end{bmatrix} \odot \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix} = \begin{bmatrix} -0.023 \\ 0.0115 \\ 0.0 \end{bmatrix}
+$$
+
+#### Gradientes de capa 1:
+
+$$
+\frac{\partial L}{\partial W^1} = \delta^1 (x)^T = 
+\begin{bmatrix}
+-0.023 \\ 0.0115 \\ 0.0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 2
+\end{bmatrix}
+$$
+
+$$
+=\begin{bmatrix}
+-0.023 & -0.046 \\
+0.0115 & 0.023 \\
+0 & 0
+\end{bmatrix}
+$$
+
+$$
+\frac{\partial L}{\partial b^1} = \delta^1 = \begin{bmatrix} -0.023 \\ 0.0115 \\ 0.0 \end{bmatrix}
+$$
+
+---
+
+## ✅ Resumen de Gradientes
+
+* **Capa 2:**
+
+  * $\frac{\partial L}{\partial W^2} = \begin{bmatrix} -0.092 & -0.069 & 0 \end{bmatrix}$
+  * $\frac{\partial L}{\partial b^2} = -0.1150$
+
+* **Capa 1:**
+
+  * $\frac{\partial L}{\partial W^1} = \begin{bmatrix}
+    -0.023 & -0.046 \\
+    0.0115 & 0.023 \\
+    0 & 0
+    \end{bmatrix}$
+  * $\frac{\partial L}{\partial b^1} = \begin{bmatrix} -0.023 \\ 0.0115 \\ 0 \end{bmatrix}$
+
+---
