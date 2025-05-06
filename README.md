@@ -1,11 +1,13 @@
-**1. Propagación hacia atrás (backpropagation)**
+# Propagación hacia atrás
+
+## **1. Propagación hacia atrás (backpropagation)**
 
 La propagación hacia atrás es el proceso mediante el cual una red neuronal **calcula cómo ajustar sus pesos y sesgos** para **reducir el error** de su salida.  
 Matemáticamente, se basa en **la regla de la cadena** del cálculo diferencial.
 
 ---
 
-**2. El contexto básico: una red neuronal simple**
+## **2. El contexto básico: una red neuronal simple**
 
 Supongamos una red con:
 - Una entrada $x$,
@@ -30,7 +32,7 @@ $$
 
 ---
 
-**3. Objetivo de la propagación hacia atrás**
+## **3. Objetivo de la propagación hacia atrás**
 
 Queremos calcular:
 - $\frac{\partial L}{\partial w}$ (cómo cambia la pérdida si cambio el peso)
@@ -49,7 +51,7 @@ donde $\eta$ es la tasa de aprendizaje.
 
 ---
 
-**4. Aplicando la regla de la cadena**
+## **4. Aplicando la regla de la cadena**
 
 Primero, calculamos:
 
@@ -70,7 +72,7 @@ Ahora derivamos cada parte:
 
 ---
 
-**5. Fórmulas finales**
+## **5. Fórmulas finales**
 
 Así, combinando:
 
@@ -86,7 +88,7 @@ $$
 ---
 ---
 
-## Propagación hacia atrás en varias capas
+# Propagación hacia atrás en varias capas
 
 $$
 \delta^l = (W^{l+1})^T \delta^{l+1} \odot \sigma'^l(z^l)
@@ -149,7 +151,7 @@ Por ejemplo:
 
 ---
 
-## 5. Ejemplo
+### 5. Ejemplo
 Una red de 3 capas:
 
 * Capa 1: entrada $x \in \mathbb{R}^2$,
