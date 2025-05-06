@@ -63,10 +63,10 @@ $$\frac{\partial L}{\partial b} = \frac{\partial L}{\partial a} \cdot \frac{\par
 
 Ahora derivamos cada parte:
 
-- $\frac{\partial z}{\partial w} = x $ (porque $z = w x + b $),
-- $\frac{\partial z}{\partial b} = 1 $,
-- $ \frac{\partial a}{\partial z} = \sigma'(z) $ (derivada de la función de activación),
-- $ \frac{\partial L}{\partial a} $ depende de cómo sea la función de pérdida (por ejemplo, en MSE: $ L(a, y) = \frac{1}{2}(a - y)^2 $, entonces $ \frac{\partial L}{\partial a} = a - y $).
+- $\frac{\partial z}{\partial w} = x$ (porque $z = w x + b$),
+- $\frac{\partial z}{\partial b} = 1$,
+- $\frac{\partial a}{\partial z} = \sigma'(z)$ (derivada de la función de activación),
+- $\frac{\partial L}{\partial a}$ depende de cómo sea la función de pérdida (por ejemplo, en MSE: $L(a, y) = \frac{1}{2}(a - y)^2$, entonces $\frac{\partial L}{\partial a} = a - y$).
 
 ---
 
