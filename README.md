@@ -413,16 +413,26 @@ $$
 
 * **Capa 2:**
 
-  * $\frac{\partial L}{\partial W^2} = \begin{bmatrix} -0.092 & -0.069 & 0 \end{bmatrix}$
-  * $\frac{\partial L}{\partial b^2} = -0.1150$
+  $$
+  \frac{\partial L}{\partial W^2} = \begin{bmatrix} -0.092 & -0.069 & 0 \end{bmatrix}
+  $$
+
+  $$
+  \frac{\partial L}{\partial b^2} = -0.1150
+  $$
 
 * **Capa 1:**
 
-  * $\frac{\partial L}{\partial W^1} = \begin{bmatrix}
+  $$
+  \frac{\partial L}{\partial W^1} = \begin{bmatrix}
     -0.023 & -0.046 \\
     0.0115 & 0.023 \\
     0 & 0
-    \end{bmatrix}$
-  * $\frac{\partial L}{\partial b^1} = \begin{bmatrix} -0.023 \\ 0.0115 \\ 0 \end{bmatrix}$
+  \end{bmatrix}
+  $$
+
+  $$
+  \frac{\partial L}{\partial b^1} = \begin{bmatrix} -0.023 \\ 0.0115 \\ 0 \end{bmatrix}
+  $$
 
 ---
